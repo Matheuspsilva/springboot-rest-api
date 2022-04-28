@@ -23,4 +23,10 @@ public class GreetingsController {
     public String greetingText(@PathVariable String name) {
         return "Hello " + name + "!";
     }
+    
+    @RequestMapping(value = "/helloworld/{name}", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    public String helloWorld(@PathVariable String name) {
+        return "Hello world,  " + name + "!";
+    }
 }
