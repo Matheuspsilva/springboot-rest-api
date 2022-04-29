@@ -103,6 +103,16 @@ public class GreetingsController {
     	return new ResponseEntity<Usuario>(usuarioSalvo, HttpStatus.OK);
     	
     }
+    
+    @GetMapping(value = "usuario/nome") // Mapeia a URL
+    @ResponseBody //Descrição da resposta
+    public ResponseEntity<List<Usuario>> buscarUsuarioPorNome(@RequestParam (name = "nome")String nome){ // Recebe os dados para salvar
+    	
+    	List<Usuario> usuarios = usuarioRepository.buscarPorNome(nome.trim().toLowerCase());
+    	
+    	return new ResponseEntity<List<Usuario>>(usuarios, HttpStatus.OK);
+    	
+    }
 
     
 }
