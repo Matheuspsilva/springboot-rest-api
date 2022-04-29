@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -86,6 +87,20 @@ public class GreetingsController {
     	Usuario usuario = usuarioRepository.findById(id).get();
     	
     	return new ResponseEntity<Usuario>(usuario, HttpStatus.OK);
+    	
+    }
+    
+    @PutMapping(value = "usuario") // Mapeia a URL
+    @ResponseBody //Descrição da resposta
+    public ResponseEntity<?> atualizarUsuario(@RequestBody Usuario usuario){ // Recebe os dados para salvar
+    	
+    	if(usuario.getId() == null) {
+    		return new ResponseEntity<String>("Id não foi informado para atualização", HttpStatus.BAD_REQUEST);
+    	}
+    	
+    	Usuario usuarioSalvo = usuarioRepository.saveAndFlush(usuario); //
+    	
+    	return new ResponseEntity<Usuario>(usuarioSalvo, HttpStatus.OK);
     	
     }
 
