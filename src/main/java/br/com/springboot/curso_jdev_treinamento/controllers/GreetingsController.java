@@ -35,22 +35,22 @@ public class GreetingsController {
      * @param name the name to greet
      * @return greeting text
      */
-    @RequestMapping(value = "/{name}", method = RequestMethod.GET)
-    @ResponseStatus(HttpStatus.OK)
-    public String greetingText(@PathVariable String name) {
-        return "Hello " + name + "!";
-    }
-    
-    @RequestMapping(value = "/helloworld/{name}", method = RequestMethod.GET)
-    @ResponseStatus(HttpStatus.OK)
-    public String helloWorld(@PathVariable String name) {
-    	Usuario usuario = new Usuario();
-    	usuario.setNome(name);
-    	
-    	usuarioRepository.save(usuario);
-    	
-        return "Hello world,  " + name + "!";
-    }
+//    @RequestMapping(value = "/{name}", method = RequestMethod.GET)
+//    @ResponseStatus(HttpStatus.OK)
+//    public String greetingText(@PathVariable String name) {
+//        return "Hello " + name + "!";
+//    }
+//    
+//    @RequestMapping(value = "/helloworld/{name}", method = RequestMethod.GET)
+//    @ResponseStatus(HttpStatus.OK)
+//    public String helloWorld(@PathVariable String name) {
+//    	Usuario usuario = new Usuario();
+//    	usuario.setNome(name);
+//    	
+//    	usuarioRepository.save(usuario);
+//    	
+//        return "Hello world,  " + name + "!";
+//    }
     
     @GetMapping(value = "usuarios")
     @ResponseBody //Retorna os dados para o corpo da resposta
