@@ -40,8 +40,9 @@
 			onclick="salvarUsuario()">Salvar</button>
 		<button type="button" class="btn btn-secondary"
 			onclick="document.getElementById('formCadstroUser').reset()">Novo</button>
-		<button type="button" class="btn btn-danger" data-bs-toggle="modal"
+		<button type="button" class="btn btn-info" data-bs-toggle="modal"
 			data-bs-target="#modalPesquisarUser">Pesquisar</button>
+		<button type="button" onclick="deletarUsuario($('#id').val())" class="btn btn-danger">Deletar</button>
 
 	</div>
 
@@ -62,7 +63,8 @@
 								nome:</label> <input type="text" class="form-control" id="nomeBusca">
 						</div>
 
-						<button type="button" class="btn btn-primary" onclick="pesquisarUsuario();">Buscar</button>
+						<button type="button" class="btn btn-primary"
+							onclick="pesquisarUsuario();">Buscar</button>
 					</form>
 
 					<table class="table" id="tabelaresultados">
@@ -71,11 +73,12 @@
 								<th scope="col">ID</th>
 								<th scope="col">Nome</th>
 								<th scope="col">Editar</th>
+								<th scope="col">Deletar</th>
 
 							</tr>
 						</thead>
 						<tbody>
-	
+
 						</tbody>
 					</table>
 
@@ -104,51 +107,86 @@
 		function pesquisarUsuario() {
 			var nome = $("#nomeBusca").val();
 
-			if(nome != null && nome.trim() != ''){
-				
+			if (nome != null && nome.trim() != '') {
+
 				$.ajax({
-					method : "GET",
-					url : "usuario/nome",
-					data : "nome=" + nome,
-					contentType : "application/json; charset=utf-8",
-					success : function(response) {
-						$('#tabelaresultados > tbody > tr').remove();
-						
-						for(var i = 0; i< response.length; i++){
-							$('#tabelaresultados > tbody').append('<tr><td>' + response[i].id + '</td><td>' + response[i].nome + '</td><td><button type="button" onclick="colocarEmEdicao(' + response[i].id + ')" class="btn btn-primary">Ver</button></td></tr>');
-						}
-			
-					}
-				}).fail(function(xhr, status, errorThrown) {
-					alert("Erro ao buscar usuario: " + xhr.responseText);
-				});
-				
+						method : "GET",
+						url : "usuario/nome",
+						data : "nome=" + nome,
+						contentType : "application/json; charset=utf-8",
+						success : function(response) {
+							$('#tabelaresultados > tbody > tr')
+									.remove();
+
+							for (var i = 0; i < response.length; i++) {
+								$('#tabelaresultados > tbody')
+										.append(
+												'<tr id="' + response[i].id + '"><td>'
+														+ response[i].id
+														+ '</td><td>'
+														+ response[i].nome
+														+ '</td><td><button type="button" onclick="colocarEmEdicao('
+														+ response[i].id
+														+ ')" class="btn btn-primary">Ver</button></td><td><button type="button" onclick="deletarUsuario('
+														+ response[i].id
+														+ ')" class="btn btn-danger">Deletar</button></td></tr>');
+							}
+
+							}
+								}).fail(
+								function(xhr, status, errorThrown) {
+									alert("Erro ao buscar usuario: "
+											+ xhr.responseText);
+								});
+
 			}
-			
+
 		}
-		
+
 		function colocarEmEdicao(id) {
-			
+
 			$.ajax({
 				method : "GET",
 				url : "usuario",
 				data : "id=" + id,
 				success : function(response) {
-					
 
 					$("#id").val(response.id);
 					$("#nome").val(response.nome);
 					$("#idade").val(response.idade);
-					
+
 					$("#modalPesquisarUser").modal('hide');
-		
+
 				}
 			}).fail(function(xhr, status, errorThrown) {
 				alert("Erro ao buscar usuario por id: " + xhr.responseText);
 			});
-			
+
 		}
-		
+
+		function deletarUsuario(id) {
+			if (confirm('Deseja realmente deletar?')) {
+				
+				$.ajax({
+					method : "DELETE",
+					url : "usuario",
+					data : "id=" + id,
+					success : function(response) {
+
+						$("#" + id).remove();
+						document.getElementById('formCadstroUser').reset();
+						alert(response);
+
+					}
+				}).fail(
+						function(xhr, status, errorThrown) {
+							alert("Erro ao deletar usuario por id: "
+									+ xhr.responseText);
+						});
+
+			}
+		}
+
 		function salvarUsuario() {
 
 			var id = $("#id").val();
