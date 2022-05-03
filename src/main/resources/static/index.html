@@ -12,7 +12,7 @@
 	crossorigin="anonymous">
 </head>
 <body>
-	<div class="container">
+	<div class="container mt-4">
 		<h3>Spring Boot Rest API CRUD</h3>
 
 		<form action="" id="formCadstroUser">
@@ -66,23 +66,22 @@
 						<button type="button" class="btn btn-primary"
 							onclick="pesquisarUsuario();">Buscar</button>
 					</form>
-
-					<table class="table" id="tabelaresultados">
-						<thead>
-							<tr>
-								<th scope="col">ID</th>
-								<th scope="col">Nome</th>
-								<th scope="col">Editar</th>
-								<th scope="col">Deletar</th>
-
-							</tr>
-						</thead>
-						<tbody>
-
-						</tbody>
-					</table>
-
-
+					<div style="height:300px;overflow: scroll;">
+						<table class="table" id="tabelaresultados">
+							<thead>
+								<tr>
+									<th scope="col">ID</th>
+									<th scope="col">Nome</th>
+									<th scope="col">Editar</th>
+									<th scope="col">Deletar</th>
+	
+								</tr>
+							</thead>
+							<tbody>
+	
+							</tbody>
+						</table>
+					</div>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary"
@@ -165,26 +164,32 @@
 		}
 
 		function deletarUsuario(id) {
-			if (confirm('Deseja realmente deletar?')) {
+			if(id != null && id.trim() != ''){
+				if (confirm('Deseja realmente deletar?')) {
+					
+					$.ajax({
+						method : "DELETE",
+						url : "usuario",
+						data : "id=" + id,
+						success : function(response) {
+
+							$("#" + id).remove();
+							document.getElementById('formCadstroUser').reset();
+							alert(response);
+
+						}
+					}).fail(
+							function(xhr, status, errorThrown) {
+								alert("Erro ao deletar usuario por id: "
+										+ xhr.responseText);
+							});
+
+				}
 				
-				$.ajax({
-					method : "DELETE",
-					url : "usuario",
-					data : "id=" + id,
-					success : function(response) {
-
-						$("#" + id).remove();
-						document.getElementById('formCadstroUser').reset();
-						alert(response);
-
-					}
-				}).fail(
-						function(xhr, status, errorThrown) {
-							alert("Erro ao deletar usuario por id: "
-									+ xhr.responseText);
-						});
-
+			}else{
+				alert("Selecione um usário válido para deletar");
 			}
+
 		}
 
 		function salvarUsuario() {
@@ -192,7 +197,19 @@
 			var id = $("#id").val();
 			var nome = $("#nome").val();
 			var idade = $("#idade").val();
-
+			
+			if(nome == null || nome.trim() == '' ){
+				alert("Informe um nome");
+				$("#nome").focus();
+				return;
+			}
+			
+			if(idade == null || idade.trim() == '' ){
+				alert("Informe a idade");
+				$("#idade").focus();
+				return;
+			}
+			
 			$.ajax({
 				method : "POST",
 				url : "usuario",
